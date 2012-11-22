@@ -1,21 +1,19 @@
 
-// 
-// ------------------------------------------------------------------------------
+#include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
+#include "output.h"					
 
-#include <avr/io.h>	
-//#include <util/delay.h>								//Headerdatei einbinden zur Registerdefinition
-
-void output(char[100]);
+//void output(char[100]);
 
 int main(void) {
 	
 	char in[20]={0};
 	char out[100]={0};	
-	unsigned char i=0;							//Variable zum Zwischenspeichern deklarieren
+	unsigned char i=0;							
 	
 	UCSRB = (1<<RXEN) | (1<<TXEN);        			//USART Receiver und Transmitter einschalten
 													//die nötigen Ausgangspins des Controllers werden
 													//automatisch auf USART-Funktionalität umgeschalten
+													
     UCSRC = (1<<URSEL)|(3<<UCSZ0);    				//Asynchron, keine Parität, 1 Stoppbit, 8 Datenbits
 													//URSEL muss für Zugriff auf UCSRC gesetzt sein
  
@@ -69,7 +67,7 @@ int main(void) {
 
 
 
-
+/*
 void output(char out[100])
 {	
 	while( !( UCSRA & (1<<UDRE) )){}
@@ -86,3 +84,5 @@ void output(char out[100])
 	while( !( UCSRA & (1<<UDRE) )){}
 	UDR=32;
 }
+
+*/
