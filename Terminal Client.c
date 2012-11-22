@@ -4,7 +4,8 @@
 
 //void output(char[100]);
 
-int main(void) {
+int main(void) 
+{
 	
 	char in[20]={0};
 	char out[100]={0};	
@@ -27,32 +28,33 @@ int main(void) {
 		{
 			while ( !(UCSRA & (1<<RXC)) )
 			{
-				//warten bis Daten empfangen werden
+													//warten bis Daten empfangen werden
 			}
 
-			in[i]=UDR;
+			in[i]=UDR;								//Ankommendes Byte in "in" Array schreiben
 
 			while( !( UCSRA & (1<<UDRE) ))
 			{
-			}				//warten bis "USART Data Register Empty" gesetzt ist
+			}										//warten bis "USART Data Register Empty" gesetzt ist
 
-			UDR = in[i];
+			UDR = in[i];							//empfangenes Byte als Echo zurück senden
 
-			if(in[i]==13)
+			if(in[i]==13)							//Wenn Eingabe 13 (Enter) war...
 			{
 				while( !( UCSRA & (1<<UDRE) ))
 				{
-				}		//warten bis "USART Data Register Empty" gesetzt ist
+				}									//warten bis "USART Data Register Empty" gesetzt ist
 			
-				UDR=11;
-				break;
+				UDR=11;								//...Zeilenrücklauf (11) schicken. (Enter wurde schon per echo geschickt)
+				break;								//-> wir haben eine Terminierende "13" im Array
 			}
 
 		}	
-	if(i==20)
-	{	
-		output("Zu viele Zeichen im Befehl, höchstens 20 Erlaubt!!!");
-	}
+
+		if(i<=20)
+		{
+			output("Zu viele Zeichen im Befehl, höchstens 20 Erlaubt!!!");	//Funktion "output" aufrufen
+		}
 	
 	}
 	
@@ -62,27 +64,3 @@ int main(void) {
 
 	return 0;
 }
-
-
-
-
-
-/*
-void output(char out[100])
-{	
-	while( !( UCSRA & (1<<UDRE) )){}
-	UDR=13;
-	while( !( UCSRA & (1<<UDRE) )){}
-	UDR=11;
-	for(int i=0;out[i];i++)
-	{
-		while( !( UCSRA & (1<<UDRE) ))
-		{
-		}
-		UDR=out[i];
-	}
-	while( !( UCSRA & (1<<UDRE) )){}
-	UDR=32;
-}
-
-*/
