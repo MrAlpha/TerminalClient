@@ -1,6 +1,8 @@
 
 #include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
-#include "output.h"					
+#include "output.h"			
+#include "pars.h"
+#include <avr/interrupt.h>						
 
 //void output(char[100]);
 
@@ -21,6 +23,11 @@ int main(void)
     UBRRH = 0;										//Einstellen der Baudrate
     UBRRL = 51;										//Werte aus der Tabelle im Datenblatt
 	
+	
+//	UCSRB=(1<<RXCIE);								//Setze RX Complete Interrupt Enable
+
+//	sei;											//global interrupt enable
+
 	//Hauptprogramm (Endlosschleife)
 	while(1)
 	{
@@ -51,10 +58,12 @@ int main(void)
 
 		}	
 
-		if(i<=20)
+		if(i>=20)
 		{
 			output("Zu viele Zeichen im Befehl, höchstens 20 Erlaubt!!!");	//Funktion "output" aufrufen
 		}
+		
+		pars(in);
 	
 	}
 	
