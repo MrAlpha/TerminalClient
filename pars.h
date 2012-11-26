@@ -1,25 +1,30 @@
-//Funktion "pars": Zerlegt die Eingabe und ruft entsprechende Funktionen auf um den Befehl auszuführen
 
-					//setzt "select" in Abhängigkeit von erkanntem Befehl.
+//Funktion zum Zerlegt der Eingabe,
+//Rückgabe von Werten zum Aufrufen der entsprechenden Fktionen
+//gibt Parameter per pointer zurück.
+
+					//Rückgabewerte entsprächend des erkannten befehls:
 					//
-					//select:
-					//1=LED
-					//2=taster
-					//3=trap
-					//4=help
+					//1=LED on
+					//2=LED off
+					//3=Taster
+					//4=Trap on
+					//5=Trap off
+					//6=Help
+					//-1 Fehler (Befehl existiert nicht -> wurde falsch geschrieben o.ä.)
 
-int pars(char in[20])
+int pars(char in[20], int *ppara)	//->evtl. als rückgabegröße char???
 {
-	char led[]="LED";				//
-	char taster[]="Taster";
-	char trap[]="Trap";
+	char led[]="LED";				//"Vergleichs arrays
+	char taster[]="Taster";			//
+	char trap[]="Trap";				//
 	char help[]="Help";
 	char on[]="on";
 	char off[]="off";
 		
 	char i=0;
 	char select=0;			//Erkannter Befehl
-	char para=0;			//Ausgelesener Parameter zur Übergabe an ausführende Funktion.
+	//char *ppara;			//Pointer zur Übergabe des Ausgelesenen Parameters an die Main.
 	
 	for(i=0; in[i]==led[i]; i++)	//Vergleichen: Eingabe==LED?
 	{
@@ -59,16 +64,25 @@ int pars(char in[20])
 	
 	switch(select)
 	{
-		case 1:									//liest den parameter aus und speichert in in "para"
-		{										//liest den letzten Teil des Befehles aus und ruft dann entsprechende Fkt. auf.
-			para=in[4];
-			
+		case 1:					//liest den letzten Teil des Befehles aus und ruft dann entsprechende Fkt. auf.				
+		{	
+			if (7<in[4]<0)
+			{
+				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
+				break;
+			}
+			else
+			{	
+												
+				ppara=in[4];						//liest den parameter aus und übergibt ihn per pointer zur main
+			}
+						
 			for (i=0; in[i+6]==on[i]; i++)
 			{
 				if (i==1)
 				{
-					//Aufruf LED_on mit Parameter(para)
-					break;
+					return 1;					//LED on
+					//break;
 				}
 			}
 			
@@ -76,8 +90,8 @@ int pars(char in[20])
 			{
 				if (i==2)
 				{
-					//Aufruf LED_off mit Parameter(para)
-					break;
+					return 2;					//LED off
+					//break;
 				}
 			}
 			break;
@@ -85,10 +99,19 @@ int pars(char in[20])
 		
 		case  2:
 		{
-			para=in[7];
+			if (7<in[7]<0)
+			{
+				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
+				break;
+			} 
+			else
+			{
+				ppara=in[7];						//liest den parameter aus und übergibt ihn per pointer zur main
+			}
 			
-			//Aufruf read_pin mit Parameter(para)
-			break;
+			
+			return 3;					//Taster
+			//break;
 		}
 		
 		case  3:
@@ -97,8 +120,8 @@ int pars(char in[20])
 			{
 				if (i==2)
 				{
-					//trap aktivieren
-					break;
+					return 4;		//Trap on
+					//break;
 				}
 			}
 			
@@ -106,8 +129,8 @@ int pars(char in[20])
 			{
 				if (i==3)
 				{
-					//trap abschalten
-					break;
+					return 5;		//Trap off
+					//break;
 				}
 			}
 			break;
@@ -115,14 +138,15 @@ int pars(char in[20])
 		
 		case 4:
 		{
-			//aufruf help
-			break;
+			return 6;			//Help
+			//break;
 		}
 		
 		default:
 		{
-			//Fehlermeldung raushauen, Befehl existiert nicht!!!
-			break;
+			return -1;
+			//output("Befehl existiert nicht!");
+			//break;
 		}
 	}
 }

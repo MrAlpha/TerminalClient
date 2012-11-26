@@ -13,7 +13,9 @@ int main(void)
 	
 	char in[MAX_INPUT]={0};
 	char out[100]={0};	
-	unsigned char i=0;							
+	unsigned char i=0;	
+	unsigned char para=0;
+	unsigned char *ppara= &para;						
 	
 	UCSRB = (1<<RXEN) | (1<<TXEN);        			//USART Receiver und Transmitter einschalten
 													//die nötigen Ausgangspins des Controllers werden
@@ -65,7 +67,7 @@ int main(void)
 			output("Zu viele Zeichen im Befehl, höchstens MAX_INPUT Erlaubt!!!");	//Funktion "output" aufrufen
 		}
 		
-		pars(in/*[MAX_INPUT]*/);
+		pars(in/*[MAX_INPUT]*/, ppara);
 	
 	}
 	
