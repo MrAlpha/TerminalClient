@@ -1,6 +1,16 @@
+//Funktion "pars": Zerlegt die Eingabe und ruft entsprechende Funktionen auf um den Befehl auszuführen
+
+					//setzt "select" in Abhängigkeit von erkanntem Befehl.
+					//
+					//select:
+					//1=LED
+					//2=taster
+					//3=trap
+					//4=help
+
 int pars(char in[20])
 {
-	char led[]="LED";
+	char led[]="LED";				//
 	char taster[]="Taster";
 	char trap[]="Trap";
 	char help[]="Help";
@@ -9,7 +19,7 @@ int pars(char in[20])
 		
 	char i=0;
 	char select=0;			//Erkannter Befehl
-	char para=0;			//Ausgelesener Parameter zur Übergabe an "mach" Funktion.
+	char para=0;			//Ausgelesener Parameter zur Übergabe an ausführende Funktion.
 	
 	for(i=0; in[i]==led[i]; i++)	//Vergleichen: Eingabe==LED?
 	{
@@ -49,8 +59,8 @@ int pars(char in[20])
 	
 	switch(select)
 	{
-		case 1:
-		{
+		case 1:									//liest den parameter aus und speichert in in "para"
+		{										//liest den letzten Teil des Befehles aus und ruft dann entsprechende Fkt. auf.
 			para=in[4];
 			
 			for (i=0; in[i+6]==on[i]; i++)
@@ -75,16 +85,37 @@ int pars(char in[20])
 		
 		case  2:
 		{
+			para=in[7];
+			
+			//Aufruf read_pin mit Parameter(para)
 			break;
 		}
 		
 		case  3:
 		{
+			for (i=0;in[i+5]==on[i];i++)
+			{
+				if (i==2)
+				{
+					//trap aktivieren
+					break;
+				}
+			}
+			
+			for (i=0;in[i+5]==off[i];i++)
+			{
+				if (i==3)
+				{
+					//trap abschalten
+					break;
+				}
+			}
 			break;
 		}
 		
 		case 4:
 		{
+			//aufruf help
 			break;
 		}
 		

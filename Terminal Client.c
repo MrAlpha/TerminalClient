@@ -6,10 +6,12 @@
 
 //void output(char[100]);
 
+#define MAX_INPUT 20
+
 int main(void) 
 {
 	
-	char in[20]={0};
+	char in[MAX_INPUT]={0};
 	char out[100]={0};	
 	unsigned char i=0;							
 	
@@ -31,7 +33,7 @@ int main(void)
 	//Hauptprogramm (Endlosschleife)
 	while(1)
 	{
-		for(i=0;i<20;i++)
+		for(i=0;i<MAX_INPUT;i++)
 		{
 			while ( !(UCSRA & (1<<RXC)) )
 			{
@@ -58,12 +60,12 @@ int main(void)
 
 		}	
 
-		if(i>=20)
+		if(i>=MAX_INPUT)
 		{
-			output("Zu viele Zeichen im Befehl, höchstens 20 Erlaubt!!!");	//Funktion "output" aufrufen
+			output("Zu viele Zeichen im Befehl, höchstens MAX_INPUT Erlaubt!!!");	//Funktion "output" aufrufen
 		}
 		
-		pars(in);
+		pars(in/*[MAX_INPUT]*/);
 	
 	}
 	
