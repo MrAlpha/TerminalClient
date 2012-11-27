@@ -1,19 +1,19 @@
 
 //Funktion zum Zerlegt der Eingabe,
-//Rückgabe von Werten zum Aufrufen der entsprechenden Fktionen
+//Rückgabe von int Werten zum Aufrufen der entsprechenden Fktionen
 //gibt Parameter per pointer zurück.
 
-					//Rückgabewerte entsprächend des erkannten befehls:
+					//int Rückgabewerte entsprächend des erkannten Befehls:
 					//
-					//1=LED on
-					//2=LED off
-					//3=Taster
-					//4=Trap on
-					//5=Trap off
-					//6=Help
+					//1 LED on
+					//2 LED off
+					//3 Taster
+					//4 Trap on
+					//5 Trap off
+					//6 Help
 					//-1 Fehler (Befehl existiert nicht -> wurde falsch geschrieben o.ä.)
 
-int pars(char in[20], int *ppara)	//->evtl. als rückgabegröße char???
+char pars(char in[20], int *ppara)
 {
 	char led[]="LED";				//"Vergleichs arrays
 	char taster[]="Taster";			//
@@ -24,7 +24,6 @@ int pars(char in[20], int *ppara)	//->evtl. als rückgabegröße char???
 		
 	char i=0;
 	char select=0;			//Erkannter Befehl
-	//char *ppara;			//Pointer zur Übergabe des Ausgelesenen Parameters an die Main.
 	
 	for(i=0; in[i]==led[i]; i++)	//Vergleichen: Eingabe==LED?
 	{
@@ -144,8 +143,8 @@ int pars(char in[20], int *ppara)	//->evtl. als rückgabegröße char???
 		
 		default:
 		{
-			return -1;
-			//output("Befehl existiert nicht!");
+			return -1;			//Befehl existiert nicht!
+
 			//break;
 		}
 	}

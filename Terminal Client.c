@@ -1,8 +1,8 @@
 
 #include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
-#include "output.h"			
-#include "pars.h"
-#include <avr/interrupt.h>						
+#include "output.c"			
+#include "pars.c"
+//#include <avr/interrupt.h>						
 
 //void output(char[100]);
 
@@ -15,7 +15,7 @@ int main(void)
 	char out[100]={0};	
 	unsigned char i=0;	
 	unsigned char para=0;
-	unsigned char *ppara= &para;						
+	unsigned char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
 	
 	UCSRB = (1<<RXEN) | (1<<TXEN);        			//USART Receiver und Transmitter einschalten
 													//die nötigen Ausgangspins des Controllers werden
@@ -32,7 +32,9 @@ int main(void)
 
 //	sei;											//global interrupt enable
 
-	//Hauptprogramm (Endlosschleife)
+/************************************************************************/
+/*  Hauptprogramm (Endlosschleife)                                      */
+/************************************************************************/
 	while(1)
 	{
 		for(i=0;i<MAX_INPUT;i++)
@@ -66,8 +68,52 @@ int main(void)
 		{
 			output("Zu viele Zeichen im Befehl, höchstens MAX_INPUT Erlaubt!!!");	//Funktion "output" aufrufen
 		}
+/************************************************************************/
+/* Parsen des Eingegebenen Befehls mit "pars()" und Übergabe der Werte an die Ausführenden Funktionen   */
+/************************************************************************/
+
+		switch(pars(in/*[MAX_INPUT]*/, ppara))
+		{
+			case 1:		//1 LED on
+			{
+				break;
+			}
+			
+			case 2:		//2 LED off
+			{
+				break;
+			}
+			
+			case 3:		//3 Taster
+			{
+				break;
+			}
+			
+			case 4:		//4 Trap on
+			{
+				break;
+			}
+			
+			case 5:		//5 Trap off
+			{
+				break;
+			}
+			
+			case 6:		//6 Help
+			
+			{
+				break;
+			}
+			
+			case -1:		//-1 Fehler
+			{
+				output("Der Befehl existiert nicht oder wurde falsch geschrieben!");
+				output("Bitte nochmals versuchen");
+				break;
+			}
+		}
 		
-		pars(in/*[MAX_INPUT]*/, ppara);
+		
 	
 	}
 	
