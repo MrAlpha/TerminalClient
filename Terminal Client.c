@@ -2,6 +2,8 @@
 #include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
 #include "output.c"			
 #include "pars.c"
+#include "set_led.c"
+#include "read_switch.c"
 //#include <avr/interrupt.h>						
 
 //void output(char[100]);
@@ -13,21 +15,33 @@ int main(void)
 	
 	char in[MAX_INPUT]={0};
 	char out[100]={0};	
-	unsigned char i=0;	
-	unsigned char para=0;
-	unsigned char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
+	signed char i=0;	
+	signed char para=0;
+	signed char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
 	
 	UCSRB = (1<<RXEN) | (1<<TXEN);        			//USART Receiver und Transmitter einschalten
 													//die nötigen Ausgangspins des Controllers werden
 													//automatisch auf USART-Funktionalität umgeschalten
 													
-    UCSRC = (1<<URSEL)|(3<<UCSZ0);    				//Asynchron, keine Parität, 1 Stoppbit, 8 Datenbits
+  UCSRC = (1<<URSEL)|(3<<UCSZ0);    				//Asynchron, keine Parität, 1 Stoppbit, 8 Datenbits
 													//URSEL muss für Zugriff auf UCSRC gesetzt sein
  
-    UBRRH = 0;										//Einstellen der Baudrate
-    UBRRL = 51;										//Werte aus der Tabelle im Datenblatt
-	
-	
+  UBRRH = 0;										//Einstellen der Baudrate
+  UBRRL = 51;										//Werte aus der Tabelle im Datenblatt
+
+/************************************************************************/
+/* PORT C für LEDs:                                                     */
+/************************************************************************/	
+
+	DDRC = 0xff;							//Port C als Ausgang Definieren (für die LEDs)
+	PORTC = 0x00;							//Alle Pins an Port C auf 0 setzen;
+
+/************************************************************************/
+/* PORT B für Taster:                                                   */
+/************************************************************************/
+	DDRB= 0x00;							//Port B als Eingang (für Taster)
+	PORTB= 0xff;						//Pull-ups on
+
 //	UCSRB=(1<<RXCIE);								//Setze RX Complete Interrupt Enable
 
 //	sei;											//global interrupt enable
@@ -76,16 +90,19 @@ int main(void)
 		{
 			case 1:		//1 LED on
 			{
+				set_led(1,ppara);
 				break;
 			}
 			
 			case 2:		//2 LED off
 			{
+				set_led(0,ppara);
 				break;
 			}
 			
 			case 3:		//3 Taster
 			{
+			//	read_switch();
 				break;
 			}
 			

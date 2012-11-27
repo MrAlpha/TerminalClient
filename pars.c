@@ -13,7 +13,7 @@
 					//6 Help
 					//-1 Fehler (Befehl existiert nicht -> wurde falsch geschrieben o.ä.)
 
-char pars(char in[20], int *ppara)
+signed char pars(char in[20], signed char *p)
 {
 	char led[]="LED";				//"Vergleichs arrays
 	char taster[]="Taster";			//
@@ -22,8 +22,8 @@ char pars(char in[20], int *ppara)
 	char on[]="on";
 	char off[]="off";
 		
-	char i=0;
-	char select=0;			//Erkannter Befehl
+	signed char i=0;
+	signed char select=0;			//Erkannter Befehl
 	
 	for(i=0; in[i]==led[i]; i++)	//Vergleichen: Eingabe==LED?
 	{
@@ -73,7 +73,7 @@ char pars(char in[20], int *ppara)
 			else
 			{	
 												
-				ppara=in[4];						//liest den parameter aus und übergibt ihn per pointer zur main
+				*p=in[4];						//liest den parameter aus und übergibt ihn per pointer zur main
 			}
 						
 			for (i=0; in[i+6]==on[i]; i++)
@@ -105,7 +105,7 @@ char pars(char in[20], int *ppara)
 			} 
 			else
 			{
-				ppara=in[7];						//liest den parameter aus und übergibt ihn per pointer zur main
+				*p=in[7];						//liest den parameter aus und übergibt ihn per pointer zur main
 			}
 			
 			
