@@ -58,29 +58,21 @@ int main(void)
 													//warten bis Daten empfangen werden
 			}
 
-			in[i]=UDR;								//Ankommendes Byte in "in" Array schreiben
-
-			while( !( UCSRA & (1<<UDRE) ))
-			{
-			}										//warten bis "USART Data Register Empty" gesetzt ist
-
-			UDR = in[i];							//empfangenes Byte als Echo zurück senden
+			in[i]=UDR;								//Ankommendes Byte in "in" Array schreiben...
 
 			if(in[i]==13)							//Wenn Eingabe 13 (Enter) war...
 			{
-				while( !( UCSRA & (1<<UDRE) ))
-				{
-				}									//warten bis "USART Data Register Empty" gesetzt ist
-			
-				UDR=11;								//...Zeilenrücklauf (11) schicken. (Enter wurde schon per echo geschickt)
-				break;								//-> wir haben eine Terminierende "13" im Array
+				in[i+1]='\0';						//...terminierende 0 ins Array
+				output("\n");						//Zeilen und spaltenrücklauf
+				break;									//eingabe beenden.
 			}
-
+			
+			output(in[i]);						//...und gleich als Echo wieder raushauen.
 		}	
 
-		if(i>=MAX_INPUT)
+		if(i>=(MAX_INPUT-1))
 		{
-			output("Zu viele Zeichen im Befehl, höchstens MAX_INPUT Erlaubt!!!");	//Funktion "output" aufrufen
+			output("Zu viele Zeichen im Befehl, höchstens MAX_INPUT Erlaubt!!!");
 		}
 /************************************************************************/
 /* Parsen des Eingegebenen Befehls mit "pars()" und Übergabe der Werte an die Ausführenden Funktionen   */
