@@ -19,12 +19,12 @@ int main(void)
 	signed char para=0;
 	signed char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
 	
-	UCSRB = (1<<RXEN) | (1<<TXEN);        			//USART Receiver und Transmitter einschalten
-													//die nötigen Ausgangspins des Controllers werden
-													//automatisch auf USART-Funktionalität umgeschalten
+	UCSRB = (1<<RXEN) | (1<<TXEN);        //USART Receiver und Transmitter einschalten
+																				//die nötigen Ausgangspins des Controllers werden
+																				//automatisch auf USART-Funktionalität umgeschalten
 													
   UCSRC = (1<<URSEL)|(3<<UCSZ0);    				//Asynchron, keine Parität, 1 Stoppbit, 8 Datenbits
-													//URSEL muss für Zugriff auf UCSRC gesetzt sein
+																						//URSEL muss für Zugriff auf UCSRC gesetzt sein
  
   UBRRH = 0;										//Einstellen der Baudrate
   UBRRL = 51;										//Werte aus der Tabelle im Datenblatt
@@ -100,7 +100,7 @@ int main(void)
 				break;
 			}
 			
-			case 3:		//3 Taster
+			case 3:		//3 Taster abfragen
 			{
 			//	read_switch();
 				break;
@@ -126,6 +126,16 @@ int main(void)
 			{
 				output("Der Befehl existiert nicht oder wurde falsch geschrieben!");
 				output("Bitte nochmals versuchen");
+				break;
+			}
+			
+			case 7:	//Led flash
+			{
+				break;
+			}
+			
+			case 8:	//Led lesen
+			{
 				break;
 			}
 		}

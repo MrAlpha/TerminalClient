@@ -21,6 +21,7 @@ signed char pars(char in[20], signed char *p)
 	char help[]="Help";
 	char on[]="on";
 	char off[]="off";
+	char blink[]="blinken";
 		
 	signed char i=0;
 	signed char select=0;			//Erkannter Befehl
@@ -59,13 +60,13 @@ signed char pars(char in[20], signed char *p)
 			select=4;
 			break;
 		}
-	}
+	}	
 	
-	switch(select)
+	switch(select)				//liest den letzten Teil des Befehles aus und ruft dann entsprechende Fkt. auf.		
 	{
-		case 1:					//liest den letzten Teil des Befehles aus und ruft dann entsprechende Fkt. auf.				
+		case 1:							//wenn erster Teil "LED" war
 		{	
-			if (7<in[4]<0)
+			if (7<in[4] && in[4]<0)
 			{
 				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
 				break;
@@ -93,12 +94,25 @@ signed char pars(char in[20], signed char *p)
 					//break;
 				}
 			}
+			
+			for (i=0; in[i+6]==blink[i]; i++)
+			{
+				if (i==6)
+				{
+					return 7;
+				}
+			}
+			
+			for (i=0; in[i+5]==13; i++)		//LED X an/aus? ->> Terminierende 13
+			{
+				return 8;
+			}
 			break;
 		}
 		
 		case  2:
 		{
-			if (7<in[7]<0)
+			if (7<in[4] && in[4]<0)
 			{
 				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
 				break;
@@ -148,4 +162,5 @@ signed char pars(char in[20], signed char *p)
 			//break;
 		}
 	}
+
 }
