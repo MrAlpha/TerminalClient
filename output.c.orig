@@ -3,7 +3,11 @@
 
 void output(char out[100])
 {
+<<<<<<< newOutput
+	if ((out[0]=='\') && (out[1]=='n'))	//newline. Befehl "\n" muss einzeln ohne String gesendet werden
+=======
 	/*if ((out[0]=='\n'))	//newline. Befehl "\n" muss einzeln ohne String gesendet werden
+>>>>>>> local
 	{
 		while( !( UCSRA & (1<<UDRE) ))			//Warten
 		UDR=13;									//Enter senden
@@ -11,7 +15,11 @@ void output(char out[100])
 		while( !( UCSRA & (1<<UDRE) ))			//Warten
 		UDR=11;									//Zeilenrücklauf senden
 
+<<<<<<< newOutput
+	}
+=======
 	}*/
+>>>>>>> local
 
 
 	for(int i=0;out[i];i++)				//Ausgabe
