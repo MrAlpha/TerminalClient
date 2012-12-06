@@ -4,9 +4,6 @@
 #include "pars.c"
 #include "set_led.c"
 #include "read_switch.c"
-//#include <avr/interrupt.h>						
-
-//void output(char[100]);
 
 #define MAX_INPUT 20
 
@@ -14,7 +11,7 @@ int main(void)
 {
 	
 	char in[MAX_INPUT]={0};
-	char out[100]={0};	
+	//char out[100]={0};	
 	signed char i=0;	
 	signed char para=0;
 	signed char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
@@ -34,17 +31,13 @@ int main(void)
 /************************************************************************/	
 
 	DDRC = 0xff;							//Port C als Ausgang Definieren (für die LEDs)
-	PORTC = 0xff;							//Alle Pins an Port C auf 0 setzen;
+	PORTC = 0xff;							//Alle Pins an Port C auf 1 setzen -> LEDs sind low activ;
 
 /************************************************************************/
 /* PORT B für Taster:                                                   */
 /************************************************************************/
 	DDRB= 0x00;							//Port B als Eingang (für Taster)
 	PORTB= 0xff;						//Pull-ups on
-
-//	UCSRB=(1<<RXCIE);								//Setze RX Complete Interrupt Enable
-
-//	sei;											//global interrupt enable
 
 /************************************************************************/
 /*  Hauptprogramm (Endlosschleife)                                      */
@@ -62,7 +55,7 @@ int main(void)
 
 			if(in[i]==13)							//Wenn Eingabe 13 (Enter) war...
 			{
-				in[i+1]='\0';						//...terminierende 0 ins Array
+				in[i]='\0';						//...terminierende 0 ins Array
 				output('\n');						//Zeilen und spaltenrücklauf
 				break;									//eingabe beenden.
 			}
@@ -117,6 +110,7 @@ int main(void)
 			case -1:		//-1 Fehler
 			{
 				output("Der Befehl existiert nicht oder wurde falsch geschrieben!");
+				output('\n');
 				output("Bitte nochmals versuchen");
 				break;
 			}
