@@ -4,8 +4,10 @@
 
 void read_switch(signed char *p)
 {
+	signed char place = (signed char) *p;
 	signed char temp=PINB;
 	temp &= (1<<*p);
+	
 	if (temp!=0)
 	{
 		output("");	//Taster *p gedrückt

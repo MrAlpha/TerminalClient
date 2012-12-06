@@ -1,9 +1,13 @@
 
 //Funktion zum Senden von char Strings über USART
 
-void output(char out[])
+void output(char out[100])
 {
-	if (out[0]=='\n')	//newline. Befehl "\n" muss einzeln ohne String gesendet werden
+<<<<<<< newOutput
+	if ((out[0]=='\') && (out[1]=='n'))	//newline. Befehl "\n" muss einzeln ohne String gesendet werden
+=======
+	/*if ((out[0]=='\n'))	//newline. Befehl "\n" muss einzeln ohne String gesendet werden
+>>>>>>> local
 	{
 		while( !( UCSRA & (1<<UDRE) ))			//Warten
 		UDR=13;									//Enter senden
@@ -11,7 +15,11 @@ void output(char out[])
 		while( !( UCSRA & (1<<UDRE) ))			//Warten
 		UDR=11;									//Zeilenrücklauf senden
 
+<<<<<<< newOutput
 	}
+=======
+	}*/
+>>>>>>> local
 
 
 	for(int i=0;out[i];i++)				//Ausgabe

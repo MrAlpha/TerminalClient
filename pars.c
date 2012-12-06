@@ -3,7 +3,7 @@
 //Rückgabe von int Werten zum Aufrufen der entsprechenden Fktionen
 //gibt Parameter per pointer zurück.
 
-					//int Rückgabewerte entsprächend des erkannten Befehls:
+					//signed char Rückgabewerte entsprächend des erkannten Befehls:
 					//
 					//1 LED on
 					//2 LED off
@@ -25,6 +25,9 @@ signed char pars(char in[20], signed char *p)
 		
 	signed char i=0;
 	signed char select=0;			//Erkannter Befehl
+	
+	// Selects setzen: 
+	
 	
 	for(i=0; in[i]==led[i]; i++)	//Vergleichen: Eingabe==LED?
 	{
@@ -62,11 +65,13 @@ signed char pars(char in[20], signed char *p)
 		}
 	}	
 	
+	// Switch Case von Select ausführen
+	
 	switch(select)				//liest den letzten Teil des Befehles aus und ruft dann entsprechende Fkt. auf.		
 	{
 		case 1:							//wenn erster Teil "LED" war
 		{	
-			if (7<in[4] && in[4]<0)
+			if (7<(in[4]-48) && (in[4]-48)<0)
 			{
 				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
 				break;
@@ -74,7 +79,7 @@ signed char pars(char in[20], signed char *p)
 			else
 			{	
 												
-				*p=in[4];						//liest den parameter aus und übergibt ihn per pointer zur main
+				*p=('(in[4])'-48);						//liest den parameter aus und übergibt ihn per pointer zur main
 			}
 						
 			for (i=0; in[i+6]==on[i]; i++)
@@ -103,7 +108,7 @@ signed char pars(char in[20], signed char *p)
 				}
 			}
 			
-			for (i=0; in[i+5]==13; i++)		//LED X an/aus? ->> Terminierende 13
+			for (i=0; in[i+5]=='\0'; i++)		//LED X an/aus? ->> Terminierende 13
 			{
 				return 8;
 			}
@@ -112,14 +117,14 @@ signed char pars(char in[20], signed char *p)
 		
 		case  2:
 		{
-			if (7<in[4] && in[4]<0)
+			if (7<('(in[4])'-48) && (in[4]-48)<0)
 			{
 				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
 				break;
 			} 
 			else
 			{
-				*p=in[7];						//liest den parameter aus und übergibt ihn per pointer zur main
+				*p=(in[7]-48);						//liest den parameter aus und übergibt ihn per pointer zur main
 			}
 			
 			
@@ -151,7 +156,7 @@ signed char pars(char in[20], signed char *p)
 		
 		case 4:
 		{
-			return 6;			//Help
+			return 6;			//Help hat keine Parameter zum auswerten
 			//break;
 		}
 		
@@ -162,5 +167,5 @@ signed char pars(char in[20], signed char *p)
 			//break;
 		}
 	}
-
+	
 }
