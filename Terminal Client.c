@@ -2,18 +2,18 @@
 #include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
 #include "output.c"		
 #include "outwert.c"	
-void output(char[]);
+void output(unsigned char[]);
 void outwert(char);
-//#include "pars.c"
-//#include "set_led.c"
-//#include "read_switch.c"
+#include "pars.c"
+#include "set_led.c"
+#include "read_switch.c"
 
 #define MAX_INPUT 20
 
 int main(void) 
 {
 	
-	char in[MAX_INPUT]={0};
+	unsigned char in[MAX_INPUT]={0};
 	//char out[100]={0};	
 	char i=0;	
 	signed char para=0;
@@ -33,8 +33,8 @@ int main(void)
 /* PORT C für LEDs:                                                     */
 /************************************************************************/	
 
-	DDRC = 0xff;							//Port C als Ausgang Definieren (für die LEDs)
-	PORTC = 0xff;							//Alle Pins an Port C auf 1 setzen -> LEDs sind low activ;
+	DDRA = 0xff;							//Port C als Ausgang Definieren (für die LEDs)
+	PORTA = 0xff;							//Alle Pins an Port C auf 1 setzen -> LEDs sind low activ;
 
 /************************************************************************/
 /* PORT B für Taster:                                                   */
@@ -55,6 +55,7 @@ int main(void)
 			}
 
 			in[i]=UDR;								//Ankommendes Byte in "in" Array schreiben...
+			
 
 			if(in[i]==13)							//Wenn Eingabe 13 (Enter) war...
 			{
@@ -64,7 +65,13 @@ int main(void)
 			}
 			
 			outwert(in[i]);						//...und gleich als Echo wieder raushauen.
+		
+			if (in[i]==127)
+			{
+				i-=2;
+			}
 		}	
+		
 
 		if(i>=(MAX_INPUT))
 		{
@@ -73,7 +80,7 @@ int main(void)
 /************************************************************************/
 /* Parsen des Eingegebenen Befehls mit "pars()" und Übergabe der Werte an die Ausführenden Funktionen   */
 /************************************************************************/
-/*
+
 		switch(pars(in, ppara))
 		{
 			case 1:		//1 LED on
@@ -90,7 +97,7 @@ int main(void)
 			
 			case 3:		//3 Taster abfragen
 			{
-			//	read_switch();
+			read_switch(ppara);
 				break;
 			}
 			
@@ -112,9 +119,10 @@ int main(void)
 			
 			case -1:		//-1 Fehler
 			{
-				output("Der Befehl existiert nicht oder wurde falsch geschrieben!");
-				output('\n');
+				output("Der Befehl existiert nicht!");
+				outwert('\n');
 				output("Bitte nochmals versuchen");
+				outwert('\n');
 				break;
 			}
 			
@@ -129,7 +137,7 @@ int main(void)
 			}
 		}
 		
-		*/
+		
 	
 	}
 	

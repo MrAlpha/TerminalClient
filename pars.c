@@ -79,7 +79,7 @@ signed char pars(char in[20], signed char *p)
 			else
 			{	
 												
-				*p=('(in[4])'-48);						//liest den parameter aus und übergibt ihn per pointer zur main
+				*p=((in[4])-48);						//liest den parameter aus und übergibt ihn per pointer zur main
 			}
 						
 			for (i=0; in[i+6]==on[i]; i++)
@@ -117,7 +117,7 @@ signed char pars(char in[20], signed char *p)
 		
 		case  2:
 		{
-			if (7<('(in[4])'-48) && (in[4]-48)<0)
+			if (7<((in[4])-48) && (in[4]-48)<0)
 			{
 				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
 				break;

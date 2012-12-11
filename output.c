@@ -1,7 +1,7 @@
 
 //Funktion zum Senden von char Strings über USART
 
-void output( char out[])
+void output(unsigned char out[])
 {
 		for(int i=0;out[i];i++)				//Ausgabe
 		{

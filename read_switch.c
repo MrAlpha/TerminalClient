@@ -10,10 +10,16 @@ void read_switch(signed char *p)
 	
 	if (temp!=0)
 	{
-		output("");	//Taster *p gedrückt
+		output("Taster ");	//Taster *p gedrückt
+		outwert((unsigned char) *p);
+		output("nicht gedrückt");
+		outwert('\n');
 	}
 	else
 	{
-		output(""); //Taster *p nicht gedrückt
+		output("Taster"); //Taster *p nicht gedrückt
+		outwert((unsigned char) *p);
+		output(" gedrückt");
+		outwert('\n');
 	}	
 }

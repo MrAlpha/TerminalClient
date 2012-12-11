@@ -6,12 +6,14 @@ void outwert(char out)
 		while( !( UCSRA & (1<<UDRE) ))	//Warten
 		{
 		}
-		UDR=11;						//Zeichen senden
+		UDR=13;						//Zeichen senden
 		
 		while( !( UCSRA & (1<<UDRE) ))	//Warten
 		{
 		}
 		UDR=11;						//Zeichen senden
+		
+		return;
 	}
 
 	
