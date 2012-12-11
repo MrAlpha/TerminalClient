@@ -1,9 +1,12 @@
 
 #include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
-#include "output.c"			
-#include "pars.c"
-#include "set_led.c"
-#include "read_switch.c"
+#include "output.c"		
+#include "outwert.c"	
+void output(char[]);
+void outwert(char);
+//#include "pars.c"
+//#include "set_led.c"
+//#include "read_switch.c"
 
 #define MAX_INPUT 20
 
@@ -12,7 +15,7 @@ int main(void)
 	
 	char in[MAX_INPUT]={0};
 	//char out[100]={0};	
-	signed char i=0;	
+	char i=0;	
 	signed char para=0;
 	signed char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
 	
@@ -56,22 +59,22 @@ int main(void)
 			if(in[i]==13)							//Wenn Eingabe 13 (Enter) war...
 			{
 				in[i]='\0';						//...terminierende 0 ins Array
-				output('\n');						//Zeilen und spaltenrücklauf
+				outwert('\n');						//Zeilen und spaltenrücklauf
 				break;									//eingabe beenden.
 			}
 			
-			output(in[i]);						//...und gleich als Echo wieder raushauen.
+			outwert(in[i]);						//...und gleich als Echo wieder raushauen.
 		}	
 
-		if(i>=(MAX_INPUT-1))
+		if(i>=(MAX_INPUT))
 		{
-			output("Zu viele Zeichen im Befehl, höchstens MAX_INPUT Erlaubt!!!");
+			output("Zu viele Zeichen im Befehl, höchstens 20 Erlaubt!!!");
 		}
 /************************************************************************/
 /* Parsen des Eingegebenen Befehls mit "pars()" und Übergabe der Werte an die Ausführenden Funktionen   */
 /************************************************************************/
-
-		switch(pars(in/*[MAX_INPUT]*/, ppara))
+/*
+		switch(pars(in, ppara))
 		{
 			case 1:		//1 LED on
 			{
@@ -126,7 +129,7 @@ int main(void)
 			}
 		}
 		
-		
+		*/
 	
 	}
 	

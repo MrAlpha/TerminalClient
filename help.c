@@ -2,7 +2,7 @@
 
 #include "output.c"
 
-void help();
+void help()
 {
 	output("Hilfe:");
 	output("------------------------------");
