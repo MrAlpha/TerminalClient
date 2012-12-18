@@ -1,23 +1,25 @@
 
 #include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
 #include "output.c"		
-#include "outwert.c"	
-void output(unsigned char[]);
+
+void output(char[]);
 void outwert(char);
+
 #include "pars.c"
 #include "set_led.c"
 #include "read_switch.c"
+#include "help.c"
 
 #define MAX_INPUT 20
 
 int main(void) 
 {
 	
-	unsigned char in[MAX_INPUT]={0};
-	//char out[100]={0};	
+	char in[MAX_INPUT]={0};	
+	//char pfeil_links[3]={27,91,68}
 	char i=0;	
-	signed char para=0;
-	signed char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
+	char para=0;
+	char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
 	
 	UCSRB = (1<<RXEN) | (1<<TXEN);        //USART Receiver und Transmitter einschalten
 																				//die nötigen Ausgangspins des Controllers werden
@@ -33,8 +35,8 @@ int main(void)
 /* PORT C für LEDs:                                                     */
 /************************************************************************/	
 
-	DDRA = 0xff;							//Port C als Ausgang Definieren (für die LEDs)
-	PORTA = 0xff;							//Alle Pins an Port C auf 1 setzen -> LEDs sind low activ;
+	DDRA = 0xff;							//Port A als Ausgang Definieren (für die LEDs)
+	PORTA = 0xff;							//Alle Pins an Port A auf 1 setzen -> LEDs sind low activ;
 
 /************************************************************************/
 /* PORT B für Taster:                                                   */
@@ -66,7 +68,7 @@ int main(void)
 			
 			outwert(in[i]);						//...und gleich als Echo wieder raushauen.
 		
-			if (in[i]==127)
+			if (in[i]==127)					
 			{
 				i-=2;
 			}
@@ -85,19 +87,19 @@ int main(void)
 		{
 			case 1:		//1 LED on
 			{
-				set_led(1,ppara);
+				set_led(1,para);
 				break;
 			}
 			
 			case 2:		//2 LED off
 			{
-				set_led(0,ppara);
+				set_led(0,para);
 				break;
 			}
 			
 			case 3:		//3 Taster abfragen
 			{
-			read_switch(ppara);
+			read_switch(para);
 				break;
 			}
 			
@@ -114,6 +116,13 @@ int main(void)
 			case 6:		//6 Help
 			
 			{
+				help();
+				break;
+			}
+			
+			case 7: //7 Blinken
+			{
+				set_led(2,para);
 				break;
 			}
 			
@@ -126,13 +135,10 @@ int main(void)
 				break;
 			}
 			
-			case 7:	//Led flash
-			{
-				break;
-			}
 			
 			case 8:	//Led lesen
 			{
+				
 				break;
 			}
 		}

@@ -2,23 +2,22 @@
 
 //#include "output.c"
 
-void read_switch(signed char *p)
+void read_switch(char p)
 {
-	signed char place = (signed char) *p;
-	signed char temp=PINB;
-	temp &= (1<<*p);
+	char temp=PINB;
+	temp &= (1<<p);
 	
 	if (temp!=0)
 	{
-		output("Taster ");	//Taster *p gedrückt
-		outwert((unsigned char) *p);
-		output("nicht gedrückt");
+		output("Taster ");	//Taster p gedrückt
+		outwert(p+48);
+		output(" nicht gedrückt");
 		outwert('\n');
 	}
 	else
 	{
-		output("Taster"); //Taster *p nicht gedrückt
-		outwert((unsigned char) *p);
+		output("Taster "); //Taster p nicht gedrückt
+		outwert(p+48);
 		output(" gedrückt");
 		outwert('\n');
 	}	

@@ -3,7 +3,7 @@
 //Rückgabe von int Werten zum Aufrufen der entsprechenden Fktionen
 //gibt Parameter per pointer zurück.
 
-					//signed char Rückgabewerte entsprächend des erkannten Befehls:
+					//char Rückgabewerte entsprächend des erkannten Befehls:
 					//
 					//1 LED on
 					//2 LED off
@@ -13,7 +13,7 @@
 					//6 Help
 					//-1 Fehler (Befehl existiert nicht -> wurde falsch geschrieben o.ä.)
 
-signed char pars(char in[20], signed char *p)
+signed char pars(char in[20], char *p)
 {
 	char led[]="LED";				//"Vergleichs arrays
 	char taster[]="Taster";			//
@@ -23,8 +23,8 @@ signed char pars(char in[20], signed char *p)
 	char off[]="off";
 	char blink[]="blinken";
 		
-	signed char i=0;
-	signed char select=0;			//Erkannter Befehl
+	char i=0;
+	char select=0;			//Erkannter Befehl
 	
 	// Selects setzen: 
 	
@@ -71,14 +71,14 @@ signed char pars(char in[20], signed char *p)
 	{
 		case 1:							//wenn erster Teil "LED" war
 		{	
-			if (7<(in[4]-48) && (in[4]-48)<0)
+			if (7<(in[4]-48) || (in[4]-48)<0)
 			{
 				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
+				outwert('\n');
 				break;
 			}
 			else
-			{	
-												
+			{					
 				*p=((in[4])-48);						//liest den parameter aus und übergibt ihn per pointer zur main
 			}
 						
@@ -104,22 +104,24 @@ signed char pars(char in[20], signed char *p)
 			{
 				if (i==6)
 				{
-					return 7;
+					return 7;												//LED x blinken
 				}
 			}
 			
-			for (i=0; in[i+5]=='\0'; i++)		//LED X an/aus? ->> Terminierende 13
+			for (i=0; in[i+5]=='\0'; i++)		//LED X an/aus?
 			{
 				return 8;
 			}
-			break;
+			
+			return -1;										//wenn kein passender folgebefehl kommt -> fehler
 		}
 		
-		case  2:
+		case  2:															//Taster
 		{
-			if (7<((in[4])-48) && (in[4]-48)<0)
+			if (7<((in[7])-48) || (in[7]-48)<0)
 			{
 				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
+				outwert('\n');
 				break;
 			} 
 			else
@@ -139,7 +141,6 @@ signed char pars(char in[20], signed char *p)
 				if (i==2)
 				{
 					return 4;		//Trap on
-					//break;
 				}
 			}
 			
@@ -148,23 +149,19 @@ signed char pars(char in[20], signed char *p)
 				if (i==3)
 				{
 					return 5;		//Trap off
-					//break;
 				}
 			}
-			break;
+			return -1;
 		}
 		
 		case 4:
 		{
 			return 6;			//Help hat keine Parameter zum auswerten
-			//break;
 		}
 		
 		default:
 		{
 			return -1;			//Befehl existiert nicht!
-
-			//break;
 		}
 	}
 	

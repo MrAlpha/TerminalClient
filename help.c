@@ -1,21 +1,37 @@
 //funkton to return a written help
 
-#include "output.c"
+//#include "output.c"
 
 void help()
 {
+	output("---------------------------------------------------");
+	outwert('\n');
 	output("Hilfe:");
-	output("------------------------------");
+	outwert('\n');
+	output("---------------------------------------------------");
+	outwert('\n');
 	output("Es werden folgende Befehle unterstützt:");
-	output();
-	output("LED X on");
-	output("LED X off");
+	outwert('\n');
+	outwert('\n');
+	output("LED X on -> schaltet LED X an");
+	outwert('\n');
+	output("LED X off -> schaltet LED X aus");
+	outwert('\n');
 	output("LED X flash");
-	output("Taster X");
-	output("LED X");
+	outwert('\n');
+	output("Taster X -> gibt den Zustand des Tasters aus");
+	outwert('\n');
+	output("LED X -> gibt den Zustand der LED aus");
+	outwert('\n');
 	output("Trap on");
+	outwert('\n');
 	output("Trap off");
-	output("help");
-	output();
+	outwert('\n');
+	output("Help -> gibt diese Hilfe aus. Der hier beschriebene Syntax entspricht der Implementierung im Programm");
+	outwert('\n');outwert('\n');
 	output("X steht jeweils für eine Variable von 0 bis 7");
+	outwert('\n');
+	output("---------------------------------------------------");
+	outwert('\n');
+	return;
 }
