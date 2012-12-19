@@ -100,11 +100,11 @@ signed char pars(char in[20], char *p)
 				}
 			}
 			
-			for (i=0; in[i+6]==blink[i]; i++)
+			for (i=0; in[i+6]==blink[i]; i++) //LED x blinken
 			{
 				if (i==6)
 				{
-					return 7;												//LED x blinken
+					return 7;												
 				}
 			}
 			

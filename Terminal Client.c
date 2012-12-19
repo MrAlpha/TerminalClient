@@ -9,13 +9,14 @@ void outwert(char);
 #include "set_led.c"
 #include "read_switch.c"
 #include "help.c"
+#include "read_led.c"
 
 #define MAX_INPUT 20
 
 int main(void) 
 {
 	
-	char in[MAX_INPUT]={0};	
+	char in[MAX_INPUT];	
 	//char pfeil_links[3]={27,91,68}
 	char i=0;	
 	char para=0;
@@ -49,6 +50,11 @@ int main(void)
 /************************************************************************/
 	while(1)
 	{
+		for (i=0;i<=MAX_INPUT; i++)		//"in" Array nullen -> reste entfernen
+		{
+			in[i]=0;
+		}
+		
 		for(i=0;i<MAX_INPUT;i++)
 		{
 			while ( !(UCSRA & (1<<RXC)) )
@@ -126,6 +132,12 @@ int main(void)
 				break;
 			}
 			
+			case 8:	//Led lesen
+			{
+				read_led(para);
+				break;
+			}
+			
 			case -1:		//-1 Fehler
 			{
 				output("Der Befehl existiert nicht!");
@@ -134,22 +146,8 @@ int main(void)
 				outwert('\n');
 				break;
 			}
-			
-			
-			case 8:	//Led lesen
-			{
-				
-				break;
-			}
 		}
-		
-		
-	
 	}
 	
-	
-
-
-
 	return 0;
 }
