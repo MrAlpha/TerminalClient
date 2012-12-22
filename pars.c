@@ -13,7 +13,7 @@
 					//6 Help
 					//-1 Fehler (Befehl existiert nicht -> wurde falsch geschrieben o.ä.)
 
-signed char pars(char in[20], char *p)
+ signed char pars(char in[20], char *p)
 {
 	char led[]="LED";				//"Vergleichs arrays
 	char taster[]="Taster";			//

@@ -1,6 +1,8 @@
 
+//#include "limits.h"
 #include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
-#include "output.c"		
+#include "output.c"	
+#include <avr/interrupt.h> 	
 
 void output(char[]);
 void outwert(char);
@@ -13,11 +15,13 @@ void outwert(char);
 
 #define MAX_INPUT 20
 
+char flag=0;
+char flag1=0;
+
 int main(void) 
 {
 	
 	char in[MAX_INPUT];	
-	//char pfeil_links[3]={27,91,68}
 	char i=0;	
 	char para=0;
 	char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
@@ -31,6 +35,21 @@ int main(void)
  
   UBRRH = 0;										//Einstellen der Baudrate
   UBRRL = 51;										//Werte aus der Tabelle im Datenblatt
+	
+/************************************************************************/
+/* Timer 1 konfigurieren                                                                     */
+/************************************************************************/
+
+TCCR1B  = (1<<CS12) | (1<<CS10); // Vorteiler 1056
+TIMSK	|= (1<<TOIE1);            // Timer Overflow Interrupt freischalten
+		
+/************************************************************************/
+/* Timer 2 konfigurieren                                                                     */
+/************************************************************************/
+	
+	TCCR2  = (1<<CS22) | (1<<CS20); // Vorteiler 1056
+	TIMSK |= (1<<TOIE2);            // Timer Overflow Interrupt freischalten
+	
 
 /************************************************************************/
 /* PORT C für LEDs:                                                     */
@@ -48,6 +67,8 @@ int main(void)
 /************************************************************************/
 /*  Hauptprogramm (Endlosschleife)                                      */
 /************************************************************************/
+
+sei();
 	while(1)
 	{
 		for (i=0;i<=MAX_INPUT; i++)		//"in" Array nullen -> reste entfernen
@@ -151,3 +172,32 @@ int main(void)
 	
 	return 0;
 }
+
+/************************************************************************/
+/* Interrupt Service Routine Timer 1 (16 bit)                                                                     */
+/************************************************************************/
+ISR(TIMER1_OVF_vect)
+{
+		flag += 1;
+		
+		while(flag>=1)
+		{
+			flag = 0;
+			PORTA ^= (1 << PA7);    // LED toggeln
+		}
+	
+}
+/************************************************************************/
+/* Interrupt Service Routine!!! Timer 2                                                                     */
+/************************************************************************/
+ISR( TIMER2_OVF_vect ) {
+	
+	flag1 += 1;
+	
+	while(flag1>=100)
+	{
+			flag1 = 0;			
+			
+			PORTA ^= (1 << PA6);    // LED toggeln	
+	}		
+	}

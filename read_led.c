@@ -7,14 +7,14 @@ void read_led(char p)
 	
 	if (temp!=0)
 	{
-		output("LED ");	//Taster p gedrückt
+		output("LED ");	//Led p aus
 		outwert(p+48);
 		output(" ausgeschaltet");
 		outwert('\n');
 	}
 	else
 	{
-		output("LED "); //Taster p nicht gedrückt
+		output("LED "); //Led p an
 		outwert(p+48);
 		output(" eingeschaltet");
 		outwert('\n');
