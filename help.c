@@ -19,10 +19,11 @@ void help()
 	outwert('\n');
 	output("LED X -> gibt den Zustand der LED aus");
 	outwert('\n');
+	output("LED X blinken -> l‰sst die LED blinken");
 	outwert('\n');
 	output("Taster X -> gibt den Zustand des Tasters aus");
 	outwert('\n');
-	output("Trap on");
+	output("Trap on -> schaltet die Trapfunktion an. Es werden in regelm‰ﬂigen Abst‰nden die Zust‰nde der LEDs ausgegeben.");
 	outwert('\n');
 	output("Trap off");
 	outwert('\n');

@@ -1,22 +1,33 @@
-//reads the state of an LED
+/************************************************************************/
+/*Funktion reads the state of an LED                                    */
+/************************************************************************/
 
-void read_led(char p)
+void read_led(char ledToRead_parameter)
 {
-	char temp=PINA;
-	temp &= (1<<p);
+	extern unsigned char blink_state;
+	char temp=(PINA & (1<<ledToRead_parameter));
+
+	if(blink_state & (1<<ledToRead_parameter))	
+	{
+		output("LED ");	
+		outwert(ledToRead_parameter+48);
+		output(" blinkt");
+		outwert('\n');
+	}
 	
-	if (temp!=0)
+	
+	else if (temp!=0)
 	{
 		output("LED ");	//Led p aus
-		outwert(p+48);
-		output(" ausgeschaltet");
+		outwert(ledToRead_parameter+48);
+		output(" AUS");
 		outwert('\n');
 	}
 	else
 	{
 		output("LED "); //Led p an
-		outwert(p+48);
-		output(" eingeschaltet");
+		outwert(ledToRead_parameter+48);
+		output(" AN");
 		outwert('\n');
 	}
 	

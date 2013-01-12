@@ -1,74 +1,52 @@
 
 //#include "limits.h"
-#include <avr/io.h>									//Headerdatei einbinden zur Registerdefinition
-#include "output.c"	
-#include <avr/interrupt.h> 	
+#include <avr/io.h>									//Headerdatei zur Registerdefinition einbinden
+#include <avr/interrupt.h> 					//Headerdatei zur Definition der Interruptvektoren einbinden
 
-void output(char[]);
+void output(char[]);								//Funktionsprototypen
 void outwert(char);
 
+#include "config.c"
+#include "output.c"									//Includen der Funktionen in extra Dateien
 #include "pars.c"
 #include "set_led.c"
 #include "read_switch.c"
 #include "help.c"
 #include "read_led.c"
 
-#define MAX_INPUT 20
+#define MAX_INPUT 20							//Definiert die maximale Größe des Eingabearrays.
 
-char flag=0;
-char flag1=0;
+/************************************************************************/
+/* Globale Variablen                                                    */
+/************************************************************************/
+char timer1_overflowCount=0;			
+char timer2_overflowCount=0;
+
+unsigned char blink_state=0;	//Variable zum Speichern des Blinkzustandes in binärer Form. 
 
 int main(void) 
 {
+	/************************************************************************/
+	/* Locale Variablen                                                     */
+	/************************************************************************/
 	
-	char in[MAX_INPUT];	
+	char in[MAX_INPUT];						//Array zum Speichern der über den USART empfangenen Zeichen
 	char i=0;	
 	char para=0;
 	char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
+	char trap_state=0;						//Speichert den Zustand d. Trapfunktion (an/aus)
 	
-	UCSRB = (1<<RXEN) | (1<<TXEN);        //USART Receiver und Transmitter einschalten
-																				//die nötigen Ausgangspins des Controllers werden
-																				//automatisch auf USART-Funktionalität umgeschalten
-													
-  UCSRC = (1<<URSEL)|(3<<UCSZ0);    				//Asynchron, keine Parität, 1 Stoppbit, 8 Datenbits
-																						//URSEL muss für Zugriff auf UCSRC gesetzt sein
- 
-  UBRRH = 0;										//Einstellen der Baudrate
-  UBRRL = 51;										//Werte aus der Tabelle im Datenblatt
+	/************************************************************************/
+	/* Konfigurieren der verwendeten Module                                 */
+	/************************************************************************/
 	
-/************************************************************************/
-/* Timer 1 konfigurieren                                                                     */
-/************************************************************************/
-
-TCCR1B  = (1<<CS12) | (1<<CS10); // Vorteiler 1056
-TIMSK	|= (1<<TOIE1);            // Timer Overflow Interrupt freischalten
-		
-/************************************************************************/
-/* Timer 2 konfigurieren                                                                     */
-/************************************************************************/
-	
-	TCCR2  = (1<<CS22) | (1<<CS20); // Vorteiler 1056
-	TIMSK |= (1<<TOIE2);            // Timer Overflow Interrupt freischalten
-	
-
-/************************************************************************/
-/* PORT C für LEDs:                                                     */
-/************************************************************************/	
-
-	DDRA = 0xff;							//Port A als Ausgang Definieren (für die LEDs)
-	PORTA = 0xff;							//Alle Pins an Port A auf 1 setzen -> LEDs sind low activ;
-
-/************************************************************************/
-/* PORT B für Taster:                                                   */
-/************************************************************************/
-	DDRB= 0x00;							//Port B als Eingang (für Taster)
-	PORTB= 0xff;						//Pull-ups on
+	config();											//ruft die Fkt. config auf.
+																//konfiguriert werden: USART, Timer1, Timer2, PortA und PortB.
+																//Globale Interrupts werden eingeschaltet
 
 /************************************************************************/
 /*  Hauptprogramm (Endlosschleife)                                      */
 /************************************************************************/
-
-sei();
 	while(1)
 	{
 		for (i=0;i<=MAX_INPUT; i++)		//"in" Array nullen -> reste entfernen
@@ -78,24 +56,32 @@ sei();
 		
 		for(i=0;i<MAX_INPUT;i++)
 		{
+			if ((i==0) && trap_state)	//wenn trap_state==1 (Trap angeschalten) Trap Interrupt nach Eingabe wieder aktivieren
+			{
+				TIFR |= (1<<TOV1);			//Interrupt Flag zurücksetzen -> keine Trap Meldung unmittelbar nach beenden der Eingabe
+				TIMSK	|= (1<<TOIE1);		//Trap Interrupt einschalten.
+			}
+			
 			while ( !(UCSRA & (1<<RXC)) )
 			{
 													//warten bis Daten empfangen werden
 			}
+			
+			TIMSK	&= ~(1<<TOIE1);			//Trap Interrupt während Eingabe deaktivieren
 
 			in[i]=UDR;								//Ankommendes Byte in "in" Array schreiben...
 			
 
 			if(in[i]==13)							//Wenn Eingabe 13 (Enter) war...
 			{
-				in[i]='\0';						//...terminierende 0 ins Array
+				in[i]='\0';								//...terminierende 0 ins Array
 				outwert('\n');						//Zeilen und spaltenrücklauf
-				break;									//eingabe beenden.
+				break;										//eingabe beenden.
 			}
 			
 			outwert(in[i]);						//...und gleich als Echo wieder raushauen.
 		
-			if (in[i]==127)					
+			if (in[i]==127)						//wenn Eingabe == Backspace (ASCII 127) Arrayindex i wieder um 2 verringern
 			{
 				i-=2;
 			}
@@ -132,11 +118,15 @@ sei();
 			
 			case 4:		//4 Trap on
 			{
+				TIMSK	|= (1<<TOIE1);    // Trap Interrupt freischalten
+				trap_state=1;						//
 				break;
 			}
 			
 			case 5:		//5 Trap off
 			{
+				TIMSK	&= ~(1<<TOIE1);    // Trap Interrupt sperren
+				trap_state=0;
 				break;
 			}
 			
@@ -178,26 +168,38 @@ sei();
 /************************************************************************/
 ISR(TIMER1_OVF_vect)
 {
-		flag += 1;
+		timer1_overflowCount += 1;
 		
-		while(flag>=1)
+		if(timer1_overflowCount>=3)
 		{
-			flag = 0;
-			PORTA ^= (1 << PA7);    // LED toggeln
+			timer1_overflowCount = 0;
+			output("--------------------------------");
+			outwert('\n');
+			output("Hier spricht Ihre Trap funktion!");
+			outwert('\n');
+			output("--------------------------------");
+			outwert('\n');
+			output("Aktueller Status:  ");
+			outwert('\n');
+			for (char x=0;x<=7;x++)
+			{
+				read_led(x);
+			}
+			outwert('\n');
 		}
 	
 }
 /************************************************************************/
-/* Interrupt Service Routine!!! Timer 2                                                                     */
+/* Interrupt Service Routine!!! Timer 2  (8 bit)                                                                   */
 /************************************************************************/
-ISR( TIMER2_OVF_vect ) {
+ISR( TIMER2_OVF_vect )
+{
 	
-	flag1 += 1;
+	timer2_overflowCount += 1;
 	
-	while(flag1>=100)
+	if(timer2_overflowCount>=100)		//zähler zum verringern des Taktes
 	{
-			flag1 = 0;			
-			
-			PORTA ^= (1 << PA6);    // LED toggeln	
+			timer2_overflowCount = 0;			
+			PORTA ^= (blink_state);    // LEDs toggeln	
 	}		
-	}
+}
