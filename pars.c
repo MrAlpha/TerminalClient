@@ -1,38 +1,43 @@
-//#############################################################
+ï»¿//#############################################################
 //Terminalserver
 //--------------------
 //Dennis Rudy und David Sigler	Labor Mikrocontroller WS 12/13
 //Dateiname: pars.c
 //#############################################################
 
-//Funktion zum Zerlegt der Eingabe,
-//Rückgabe von int Werten zum Aufrufen der entsprechenden Fktionen
-//gibt Parameter per pointer zurück.
+/************************************************************************/
+/* Funktion zum Zerlegt der Eingabe,																		*/
+/* RÃ¼ckgabe von signed char Werten zum Aufrufen der entsprechenden Funktionen		*/
+/* gibt Parameter per pointer zurÃ¼ck.                                   */
+/************************************************************************/
 
-					//char Rückgabewerte entsprächend des erkannten Befehls:
-					//
-					//1 LED on
-					//2 LED off
-					//3 Taster
-					//4 Trap on
-					//5 Trap off
-					//6 Help
-					//-1 Fehler (Befehl existiert nicht -> wurde falsch geschrieben o.ä.)
 
- signed char pars(char in[20], char *p)
+//signed char RÃ¼ckgabewerte entsprechend des erkannten Befehls:
+//
+//1 LED on
+//2 LED off
+//3 Taster
+//4 Trap on
+//5 Trap off
+//6 Help
+//-1 Fehler (Befehl existiert nicht -> wurde falsch geschrieben o.Ã¤.)
+
+#include "io.h"
+
+signed char pars(char in[20], char *p)
 {
-	char led[]="LED";				//"Vergleichs arrays
-	char taster[]="Taster";			//
-	char trap[]="Trap";				//
+	char led[]="LED";					//"Vergleichs arrays
+	char taster[]="Taster";		
+	char trap[]="Trap";				
 	char help[]="Help";
 	char on[]="on";
 	char off[]="off";
 	char blink[]="blinken";
-		
-	unsigned char i=0;
-	char select=0;			//Erkannter Befehl
 	
-	// Selects setzen: 
+	unsigned char i=0;
+	char select=0;			//Erkannter 1. Teil des Befehls
+	
+	// Selects setzen:
 	
 	
 	for(i=0; in[i]==led[i]; i++)	//Vergleichen: Eingabe==LED?
@@ -41,7 +46,7 @@
 		{								//wenn ja, select=1
 			select=1;
 			break;
-		}	
+		}
 	}
 	
 	for(i=0; in[i]==taster[i]; i++)	//Vergleich: Eingabe==Taster?
@@ -69,25 +74,25 @@
 			select=4;
 			break;
 		}
-	}	
+	}
 	
-	// Switch Case von Select ausführen
+	// Switch Case von Select ausfÃ¼hren
 	
-	switch(select)				//liest den letzten Teil des Befehles aus und ruft dann entsprechende Fkt. auf.		
+	switch(select)				//liest den letzten Teil des Befehles aus und gibt dann entsprechenden return wert zurÃ¼ck.
 	{
 		case 1:							//wenn erster Teil "LED" war
-		{	
+		{
 			if (7<(in[4]-48) || (in[4]-48)<0)
 			{
-				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
+				output("Befehl nicht mÃ¶glich. Nur 0-7 als Parameter zulÃ¤ssig");
 				outwert('\n');
 				break;
 			}
 			else
-			{					
-				*p=((in[4])-48);						//liest den parameter aus und übergibt ihn per pointer zur main
+			{
+				*p=((in[4])-48);						//liest den parameter aus und Ã¼bergibt ihn per pointer zur main
 			}
-						
+			
 			for (i=0; in[i+6]==on[i]; i++)
 			{
 				if (i==1)
@@ -110,7 +115,7 @@
 			{
 				if (i==6)
 				{
-					return 7;												
+					return 7;
 				}
 			}
 			
@@ -126,13 +131,13 @@
 		{
 			if (7<((in[7])-48) || (in[7]-48)<0)
 			{
-				output("Befehl nicht möglich. Nur 0-7 als Parameter zulässig");
+				output("Befehl nicht mÃ¶glich. Nur 0-7 als Parameter zulÃ¤ssig");
 				outwert('\n');
 				break;
-			} 
+			}
 			else
 			{
-				*p=(in[7]-48);						//liest den parameter aus und übergibt ihn per pointer zur main
+				*p=(in[7]-48);						//liest den parameter aus und Ã¼bergibt ihn per pointer zur main
 			}
 			
 			

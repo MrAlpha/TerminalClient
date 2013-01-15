@@ -9,28 +9,13 @@
 #include <avr/io.h>									//Headerdatei zur Registerdefinition einbinden
 #include <avr/interrupt.h> 					//Headerdatei zur Definition der Interruptvektoren einbinden
 
-#include "config.c"									//Includen der Funktionen in extra Dateien
-#include "input.c"
-#include "output.c"
-#include "pars.c"
-#include "set_led.c"
-#include "read_switch.c"
-#include "help.c"
-#include "read_led.c"
+#include "io.h"						//Includen der Funktionsprototypen aus extra Dateien
+#include "config.h"
+#include "HID.h"
+#include "pars.h"
 
 #define MAX_INPUT 20							//Definiert die maximale Größe des Eingabearrays.
 
-void output(char[]);								//Funktionsprototypen
-void outwert(char);
-void input(char in[], char trap_state);
-void config();
-void read_led(char ledToRead_parameter);
-void help();
-void read_switch(char switchToRead_parameter);
-void set_led(char state, char ledtoChange_parameter);
-signed char pars(char in[20], char *p);
-void output(char out[]);
-void outwert(char out);
 
 /************************************************************************/
 /* Globale Variablen                                                    */
