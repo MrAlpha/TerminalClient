@@ -1,3 +1,10 @@
+//#############################################################
+//Terminalserver
+//--------------------
+//Dennis Rudy und David Sigler	Labor Mikrocontroller WS 12/13
+//Dateiname: help.c
+//#############################################################
+
 //funkton to return a written help
 
 //#include "output.c"

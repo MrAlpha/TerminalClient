@@ -1,3 +1,10 @@
+//#############################################################
+//Terminalserver
+//--------------------
+//Dennis Rudy und David Sigler	Labor Mikrocontroller WS 12/13
+//Dateiname: set_led.c
+//#############################################################
+
 //funktion to set/reset LED 0-7
 
 void set_led(char state, char ledtoChange_parameter)

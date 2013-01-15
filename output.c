@@ -1,3 +1,9 @@
+//#############################################################
+//Terminalserver
+//--------------------
+//Dennis Rudy und David Sigler	Labor Mikrocontroller WS 12/13
+//Dateiname: output.c
+//#############################################################
 
 //Funktion zum Senden von char Strings über USART
 

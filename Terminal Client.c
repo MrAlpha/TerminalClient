@@ -1,13 +1,17 @@
+//#############################################################
+//Terminalserver
+//--------------------
+//Dennis Rudy und David Sigler	Labor Mikrocontroller WS 12/13
+//Dateiname: Terminal Client.c
+//#############################################################
 
-//#include "limits.h"
+
 #include <avr/io.h>									//Headerdatei zur Registerdefinition einbinden
 #include <avr/interrupt.h> 					//Headerdatei zur Definition der Interruptvektoren einbinden
 
-void output(char[]);								//Funktionsprototypen
-void outwert(char);
-
-#include "config.c"
-#include "output.c"									//Includen der Funktionen in extra Dateien
+#include "config.c"									//Includen der Funktionen in extra Dateien
+#include "input.c"
+#include "output.c"
 #include "pars.c"
 #include "set_led.c"
 #include "read_switch.c"
@@ -15,6 +19,18 @@ void outwert(char);
 #include "read_led.c"
 
 #define MAX_INPUT 20							//Definiert die maximale Größe des Eingabearrays.
+
+void output(char[]);								//Funktionsprototypen
+void outwert(char);
+void input(char in[], char trap_state);
+void config();
+void read_led(char ledToRead_parameter);
+void help();
+void read_switch(char switchToRead_parameter);
+void set_led(char state, char ledtoChange_parameter);
+signed char pars(char in[20], char *p);
+void output(char out[]);
+void outwert(char out);
 
 /************************************************************************/
 /* Globale Variablen                                                    */
@@ -31,7 +47,6 @@ int main(void)
 	/************************************************************************/
 	
 	char in[MAX_INPUT];						//Array zum Speichern der über den USART empfangenen Zeichen
-	char i=0;	
 	char para=0;
 	char *ppara= &para;						//pointer auf "para" zur übergabe der Parameter aus "pars()"
 	char trap_state=0;						//Speichert den Zustand d. Trapfunktion (an/aus)
@@ -49,51 +64,13 @@ int main(void)
 /************************************************************************/
 	while(1)
 	{
-		for (i=0;i<=MAX_INPUT; i++)		//"in" Array nullen -> reste entfernen
-		{
-			in[i]=0;
-		}
-		
-		for(i=0;i<MAX_INPUT;i++)
-		{
-			if ((i==0) && trap_state)	//wenn trap_state==1 (Trap angeschalten) Trap Interrupt nach Eingabe wieder aktivieren
-			{
-				TIFR |= (1<<TOV1);			//Interrupt Flag zurücksetzen -> keine Trap Meldung unmittelbar nach beenden der Eingabe
-				TIMSK	|= (1<<TOIE1);		//Trap Interrupt einschalten.
-			}
-			
-			while ( !(UCSRA & (1<<RXC)) )
-			{
-													//warten bis Daten empfangen werden
-			}
-			
-			TIMSK	&= ~(1<<TOIE1);			//Trap Interrupt während Eingabe deaktivieren
-
-			in[i]=UDR;								//Ankommendes Byte in "in" Array schreiben...
-			
-
-			if(in[i]==13)							//Wenn Eingabe 13 (Enter) war...
-			{
-				in[i]='\0';								//...terminierende 0 ins Array
-				outwert('\n');						//Zeilen und spaltenrücklauf
-				break;										//eingabe beenden.
-			}
-			
-			outwert(in[i]);						//...und gleich als Echo wieder raushauen.
-		
-			if (in[i]==127)						//wenn Eingabe == Backspace (ASCII 127) Arrayindex i wieder um 2 verringern
-			{
-				i-=2;
-			}
-		}	
-		
-
-		if(i>=(MAX_INPUT))
-		{
-			output("Zu viele Zeichen im Befehl, höchstens 20 Erlaubt!!!");
-		}
 /************************************************************************/
-/* Parsen des Eingegebenen Befehls mit "pars()" und Übergabe der Werte an die Ausführenden Funktionen   */
+/* Input handler                                                        */
+/************************************************************************/
+		input(in, trap_state);	//ruft die Fkt. input() auf
+		
+/************************************************************************/
+/* Parsen des eingegebenen Befehls mit "pars()" und Übergabe der Werte an die ausführenden Funktionen   */
 /************************************************************************/
 
 		switch(pars(in, ppara))

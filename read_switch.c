@@ -1,3 +1,10 @@
+//#############################################################
+//Terminalserver
+//--------------------
+//Dennis Rudy und David Sigler	Labor Mikrocontroller WS 12/13
+//Dateiname: read_switch.c
+//#############################################################
+
 //function to read state of switch 0-7
 
 //#include "output.c"

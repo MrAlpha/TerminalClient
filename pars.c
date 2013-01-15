@@ -1,3 +1,9 @@
+//#############################################################
+//Terminalserver
+//--------------------
+//Dennis Rudy und David Sigler	Labor Mikrocontroller WS 12/13
+//Dateiname: pars.c
+//#############################################################
 
 //Funktion zum Zerlegt der Eingabe,
 //Rückgabe von int Werten zum Aufrufen der entsprechenden Fktionen
@@ -23,7 +29,7 @@
 	char off[]="off";
 	char blink[]="blinken";
 		
-	char i=0;
+	unsigned char i=0;
 	char select=0;			//Erkannter Befehl
 	
 	// Selects setzen: 
